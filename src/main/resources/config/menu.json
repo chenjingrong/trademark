@@ -1,0 +1,14 @@
+[
+  {
+    "name": "一级菜单",
+    "url": "/one",
+    "auth": "SYSROLE_USER",
+    "childs": [
+      {
+        "name": "二级菜单",
+        "url": "/two",
+        "auth": "SYSROLE_USER"
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${user.name}"></title>
+</head>
+<body>
+姓名：<span th:text="${user.name}"></span><br>
+类型：<span th:text="${user.type}"></span>
+
+<button sec:authorize="hasRole('SYSROLE_USER_EDIT')">保存</button>
+</body>
+</html>

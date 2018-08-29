@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+</head>
+<body>
+<h2>这里是用户管理，需要SYSROLE_USER_DEFAULT权限</h2>
+
+<h3>多語言：<span th:text="#{test}"></span></h3>
+
+<div>账户：<span sec:authentication="name"></span></div>
+<div>拥有权限：<span sec:authentication="principal.authorities"></span></div>
+<br>
+
+<div sec:authorize="hasAuthority('SYSROLE_USER_ADD')">
+    USER_ADD : 可以新增用户
+</div>
+
+<div sec:authorize="hasAuthority('SYSROLE_USER_DELETE')">
+    SYSROLE_USER_DELETE : 可以删除用户
+</div>
+
+<div sec:authorize="hasAuthority('SYSROLE_USER_EDIT')">
+    SYSROLE_USER_EDIT : 可以编辑用户
+</div>
+
+<div sec:authorize="hasAuthority('SYSROLE_USER_DEFAULT')">
+    SYSROLE_USER_DEFAULT : 用户默认权限
+</div>
+
+<br>
+<a href="?lang=en_US">English</a> | <a href="?lang=zh_CN">中文</a> | <a href="?lang=zh_HK">繁体</a>
+</body>
+</html>

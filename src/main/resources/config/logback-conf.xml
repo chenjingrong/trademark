@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="60000">
+    <!--
+        从配置文件中设置变量：<property resource="bootstrap.properties" />
+        从spring配置中获取变量:<springProperty scope="context" name="appName" source="spring.application.name"/>
+    -->
+    <springProperty scope="context" name="logPath" source="logging.path"/>
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <!--<contextName>${appName}</contextName>-->
+    <!--
+        日志级别排序为： TRACE < DEBUG < INFO < WARN < ERROR。
+        %d：表示日期，
+        %n：换行
+        %thread：表示线程名
+        %level：日志级别
+        %msg：日志消息
+        %file：表示文件名
+        %class： 表示文件名
+        %logger：Java类名（含包名，这里设定了36位，若超过36位，包名会精简为类似a.b.c.JavaBean)
+        %line：Java类的行号
+        更多日志格式说明详见：https://logback.qos.ch/manual/layouts.html#ClassicPatternLayout
+    -->
+    <!-- 控制台策略 -->
+    <appender name ="console_out" class="ch.qos.logback.core.ConsoleAppender">
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>INFO</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+        <encoder>
+            <pattern>%-4relative %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{100}.%M\(%line\) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 日志策略 -->
+    <appender name="vanke_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/${appName}/vanke.log</file>
+        <!-- 设置滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${logPath}/${appName}/vanke-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 单文件不超过100mb，保存180天历史日志, 且大小不超过100GB -->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>180</maxHistory>
+            <totalSizeCap>100GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%-4relative %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{100}.%M\(%line\) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--logstash日志-->
+    <appender name="stash_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>info</level>
+        </filter>
+        <file>${logPath}/jsonlog.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/jsonlog.bk.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="console_out"/>
+        <appender-ref ref="vanke_log"/>
+        <appender-ref ref="stash_log"/>
+    </root>
+
+    <!-- 打印mybatis的SQL -->
+    <logger name="com.uz83.trademark" level="DEBUG"></logger>
+    <logger name="org.springframework.security" level="INFO"></logger>
+
+</configuration>

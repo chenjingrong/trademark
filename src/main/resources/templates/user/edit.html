@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${user.name}"></title>
+</head>
+<body>
+<form action="#" th:action="@{/user/update}" th:object="${user}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <p>姓名: <input type="text" th:field="*{name}"/></p>
+    <p>手机号: <input type="text" th:field="*{mobile}"/></p>
+    <p>邮箱: <input type="text" th:field="*{email}"/></p>
+    <p>微信号: <input type="text" th:field="*{wechat}"/></p>
+    <p>QQ号: <input type="text" th:field="*{qq}"/></p>
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+
+<button sec:authorize="hasRole('SYSROLE_USER_EDIT')">保存</button>
+</body>
+</html>
